@@ -1,0 +1,12 @@
+const path = require('path');
+
+module.exports = {
+  seedersPath : path.resolve("./src/db/seeders"),
+  modelsPath : path.resolve("./src/db/models"),
+  migrationsPath : path.resolve("./src/db/migrations"),
+  config : path.resolve("./src/config/config.js")
+}
+
+/**
+ * The .sequelizerc file is a configuration file used by the Sequelize CLI to define default options for Sequelize commands, such as db:migrate or db:seed. It allows you to specify settings like the database connection string, paths to migrations and seeders, and the environment to use, without having to pass these options as command-line arguments every time. 
+ */
