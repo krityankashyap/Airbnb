@@ -1,5 +1,7 @@
+import { QueryInterface } from "sequelize";
+
 module.exports = {
-  async up (queryInterface) {
+  async up (queryInterface: QueryInterface) {
 
     // up -> contains the code that will mke new changes in the db
 
@@ -14,7 +16,7 @@ module.exports = {
       `);
   },
 
-  async down (queryInterface) {
+  async down (queryInterface: QueryInterface) {
    
     // down -> contains the code that helps to rollback/revert the previous changes done by migration up
     await queryInterface.sequelize.query(`
