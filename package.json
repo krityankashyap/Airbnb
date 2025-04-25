@@ -5,7 +5,9 @@
 
   "scripts": {
     "start": "ts-node src/server.ts",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "migrate": "npx sequelize-cli db:migrate",
+    "rollback": "npx sequelize-cli db:migrate:undo"
   },
   "keywords": [],
   "author": "",
