@@ -5,6 +5,8 @@ import v2Router from './routers/v2/index.router';
 import { appErrorHandler, genericErrorHandler } from './middlewares/error.middleware';
 import logger from './config/logger.config';
 import { attachCorrelationIdMiddleware } from './middlewares/correlation.middleware';
+import sequelize from './db/models/sequelize';
+import Hotel from './db/models/hotel';
 const app = express();
 
 app.use(express.json());
@@ -26,7 +28,27 @@ app.use(appErrorHandler);
 app.use(genericErrorHandler);
 
 
-app.listen(serverConfig.PORT, () => {
+app.listen(serverConfig.PORT, async () => {
     logger.info(`Server is running on http://localhost:${serverConfig.PORT}`);
     logger.info(`Press Ctrl+C to stop the server.`);
+
+    try {
+        await sequelize.authenticate(); // Test the db connection
+        logger.info("DB connection successfully");
+        
+        const hotel = await Hotel.create({
+            name: "Hotel California",
+            address: "123 Sunset Blivd",
+            location: "Los Angeles , CA",
+            rating: 4.5,
+            ratingCount: 450,
+        });
+
+        logger.info("Hotel created successfully" , hotel.toJSON());
+        
+
+
+    } catch (error) {
+        logger.error("something went wrong");
+    }
 });
