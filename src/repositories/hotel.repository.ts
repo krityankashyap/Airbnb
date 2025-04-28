@@ -29,7 +29,11 @@ export async function findHotelById(id: number){
 }
 
 export async function getAllHotels(){
-  const hotels = await Hotel.findAll();
+  const hotels = await Hotel.findAll({
+    where: {
+      deletedAt: null,
+    }
+  });
 
   if(!hotels){
     logger.error(`No hotel found`);
@@ -37,4 +41,18 @@ export async function getAllHotels(){
   } 
   logger.info(`Hotels found ${hotels.length}`);
    return hotels;
+}
+
+export async function softDeleteHotelById(id: number){
+  const hotel = await Hotel.findByPk(id);
+
+  if(!hotel){
+    logger.error(`No hotel is found with id: ${id}`);
+    throw new NotFoundError(`No hotel with id: ${id}`);
+  }
+
+  hotel.deletedAt = new Date(); // this is updating the TS object ,not going to propagate the query alltogether in final database
+  await hotel.save; // this is going to propagate the query in final database
+  logger.info(`hotel is soft deleted: ${id}`);
+  return true;
 }

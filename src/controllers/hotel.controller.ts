@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { createHotelService, getAllHotelService, getHotelByIdService } from "../services/hotel.service";
+import { createHotelService, getAllHotelService, getHotelByIdService, softDeletionServiceById,  } from "../services/hotel.service";
 import { StatusCodes } from "http-status-codes";
 
 export async function hotelController(req: Request , res: Response , next: NextFunction){
@@ -38,4 +38,16 @@ export async function getAllHotelController(req: Request , res: Response , next:
     success: true
   });
 };
+
+export async function deletionHotelByIdController(req: Request , res: Response , next: NextFunction){
+  // 1. call the service layer
+  await softDeletionServiceById(Number(req.params.id));
+
+  // 2. send response
+
+  res.status(StatusCodes.OK).json({
+    message: "Hotel deleted successfully",
+    success: true
+  })
+}
 
