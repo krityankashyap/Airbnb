@@ -1,6 +1,6 @@
 import logger from "../config/logger.config";
 import Hotel from "../db/models/hotel";
-import createHotelDTO from "../dto/hotel.dto";
+import {createHotelDTO , updatedHotelDTO} from "../dto/hotel.dto";
 import { NotFoundError } from "../utils/errors/app.error";
 
 export async function createHotel(hotelData: createHotelDTO){
@@ -52,7 +52,21 @@ export async function softDeleteHotelById(id: number){
   }
 
   hotel.deletedAt = new Date(); // this is updating the TS object ,not going to propagate the query alltogether in final database
-  await hotel.save; // this is going to propagate the query in final database
+  await hotel.save(); // this is going to propagate the query in final database
   logger.info(`hotel is soft deleted: ${id}`);
   return true;
+}
+
+export async function updateHotelById(id: number , hotelData: updatedHotelDTO){
+  const hotel = await Hotel.findByPk(id);
+
+  if(!hotel) {
+    logger.error(`Hotel not found: ID ${id}`);
+    throw new NotFoundError(`Hotel not found: ID ${id}`);
+  }
+  await hotel.update(hotelData);
+
+  logger.info(`Hotel updated id: ${id}`);
+
+  return hotel;
 }
